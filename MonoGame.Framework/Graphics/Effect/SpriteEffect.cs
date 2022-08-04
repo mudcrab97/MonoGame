@@ -12,6 +12,9 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     public class SpriteEffect : Effect
     {
+        private float _nearPlane;
+        private float _farPlane;
+
         private EffectParameter _matrixParam;
         private Viewport _lastViewport;
         private Matrix _projection;
@@ -19,10 +22,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Creates a new SpriteEffect.
         /// </summary>
-        public SpriteEffect(GraphicsDevice device)
+        public SpriteEffect(GraphicsDevice device, float nearPlane = 0, float farPlane = 1)
             : base(device, EffectResource.SpriteEffect.Bytecode)
         {
             CacheEffectParameters();
+            _nearPlane = nearPlane;
+            _farPlane = farPlane;
         }
 
         /// <summary>
@@ -68,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Normal 3D cameras look into the -z direction (z = 1 is in front of z = 0). The
                 // sprite batch layer depth is the opposite (z = 0 is in front of z = 1).
                 // --> We get the correct matrix with near plane 0 and far plane -1.
-                Matrix.CreateOrthographicOffCenter(0, vp.Width, vp.Height, 0, 0, -1, out _projection);
+                Matrix.CreateOrthographicOffCenter(0, vp.Width, vp.Height, 0, -_nearPlane, -_farPlane, out _projection);
 
                 if (GraphicsDevice.UseHalfPixelOffset)
                 {
