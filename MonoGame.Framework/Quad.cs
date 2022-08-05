@@ -14,25 +14,25 @@ namespace Microsoft.Xna.Framework
         /// The coordinates of the top-left corner of this <see cref="Quad"/>.
         /// </summary>
         [DataMember]
-        public Vector2 TopLeft;
+        public Vector3 TopLeft;
 
         /// <summary>
         /// The coordinates of the top-right corner of this <see cref="Quad"/>.
         /// </summary>
         [DataMember]
-        public Vector2 TopRight;
+        public Vector3 TopRight;
 
         /// <summary>
         /// The coordinates of the bottom-right corner of this <see cref="Quad"/>.
         /// </summary>
         [DataMember]
-        public Vector2 BottomRight;
+        public Vector3 BottomRight;
 
         /// <summary>
         /// The coordinates of the bottom-left corner of this <see cref="Quad"/>.
         /// </summary>
         [DataMember]
-        public Vector2 BottomLeft;
+        public Vector3 BottomLeft;
         #endregion
 
         #region Public Properties
@@ -63,12 +63,12 @@ namespace Microsoft.Xna.Framework
         /// <param name="y">The y coordinate of the top-left corner of the created <see cref="Quad"/>.</param>
         /// <param name="width">The width of the created <see cref="Quad"/>.</param>
         /// <param name="height">The height of the created <see cref="Quad"/>.</param>
-        public Quad(float x, float y, float width, float height)
+        public Quad(float x, float y, float width, float height, float depth)
         {
-            TopLeft = new(x, y);
-            TopRight = new(x + width, y);
-            BottomRight = new(x + width, y + height);
-            BottomLeft = new(x, y + height);
+            TopLeft = new(x, y, depth);
+            TopRight = new(x + width, y, depth);
+            BottomRight = new(x + width, y + height, depth);
+            BottomLeft = new(x, y + height, depth);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="topRight">The coordinates of the top-right corner of the created <see cref="Quad"/>.</param>
         /// <param name="bottomRight">The coordinates of the bottom-right corner of the created <see cref="Quad"/>.</param>
         /// <param name="bottomLeft">The coordinates of the bottom-left corner of the created <see cref="Quad"/>.</param>
-        public Quad(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft)
+        public Quad(Vector3 topLeft, Vector3 topRight, Vector3 bottomRight, Vector3 bottomLeft)
         {
             TopLeft = topLeft;
             TopRight = topRight;
@@ -158,7 +158,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="topRight"></param>
         /// <param name="bottomRight"></param>
         /// <param name="bottomLeft"></param>
-        public void Deconstruct(out Vector2 topLeft, out Vector2 topRight, out Vector2 bottomRight, out Vector2 bottomLeft)
+        public void Deconstruct(out Vector3 topLeft, out Vector3 topRight, out Vector3 bottomRight, out Vector3 bottomLeft)
         {
             topLeft = TopLeft;
             topRight = TopRight;

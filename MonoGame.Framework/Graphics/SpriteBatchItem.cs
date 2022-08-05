@@ -111,6 +111,18 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexBR.TextureCoordinate.Y = texCoordBR.Y;
         }
 
+        public void Set(VertexPositionColorTexture topLeft, VertexPositionColorTexture topRight,
+            VertexPositionColorTexture bottomRight, VertexPositionColorTexture bottomLeft)
+        {
+            vertexTL = topLeft;
+
+            vertexTR = topRight;
+
+            vertexBL = bottomLeft;
+
+            vertexBR = bottomRight;
+        }
+
         #region Implement IComparable
         public int CompareTo(SpriteBatchItem other)
         {

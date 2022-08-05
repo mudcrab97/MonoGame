@@ -409,15 +409,6 @@ namespace Microsoft.Xna.Framework.Graphics
             FlushIfNeeded();
         }
 
-        // Mark the end of a draw operation for Immediate SpriteSortMode.
-        internal void FlushIfNeeded()
-        {
-            if (_sortMode == SpriteSortMode.Immediate)
-            {
-                _batcher.DrawBatch(_sortMode, _effect);
-            }
-        }
-
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
         /// </summary>
@@ -573,7 +564,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
         /// <param name="color">A color mask.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-        public void Draw(Texture2D texture, Quad destinationQuad, Rectangle? sourceRectangle, Color color, float layerDepth)
+        public void Draw(Texture2D texture, Quad destinationQuad, Rectangle? sourceRectangle, Color color)
         {
             CheckValid(texture);
 
@@ -597,23 +588,17 @@ namespace Microsoft.Xna.Framework.Graphics
                 _texCoordBR = Vector2.One;
             }
 
-            var topLeft = new Vector3(destinationQuad.TopLeft, layerDepth);
-            var topRight = new Vector3(destinationQuad.TopRight, layerDepth);
-            var bottomRight = new Vector3(destinationQuad.BottomRight, layerDepth);
-            var bottomLeft = new Vector3(destinationQuad.BottomLeft, layerDepth);
+            var topLeft = new VertexPositionColorTexture(destinationQuad.TopLeft, color, new(_texCoordTL.X, _texCoordTL.Y));
+            var topRight = new VertexPositionColorTexture(destinationQuad.TopRight, color, new(_texCoordBR.X, _texCoordTL.Y));
+            var bottomLeft = new VertexPositionColorTexture(destinationQuad.BottomLeft, color, new(_texCoordTL.X, _texCoordBR.Y));
+            var bottomRight = new VertexPositionColorTexture(destinationQuad.BottomRight, color, new(_texCoordBR.X, _texCoordBR.Y));
 
-            item.Set(topLeft,
-                     topRight,
-                     bottomRight,
-                     bottomLeft,
-                     color,
-                     _texCoordTL,
-                     _texCoordBR,
-                     0);
+            item.Set(topLeft, topRight, bottomRight, bottomLeft);
 
             FlushIfNeeded();
         }
 
+        #region DrawString
         /// <summary>
         /// Submit a text string of sprites for drawing in the current batch.
         /// </summary>
@@ -621,7 +606,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="text">The text which will be drawn.</param>
         /// <param name="position">The drawing location on screen.</param>
         /// <param name="color">A color mask.</param>
-		public unsafe void DrawString(SpriteFont spriteFont, string text, Vector2 position, Color color)
+        public unsafe void DrawString(SpriteFont spriteFont, string text, Vector2 position, Color color)
         {
             CheckValid(spriteFont, text);
 
@@ -1547,6 +1532,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // We need to flush if we're using Immediate sort mode.
             FlushIfNeeded();
+        }
+        #endregion
+
+        // Mark the end of a draw operation for Immediate SpriteSortMode.
+        internal void FlushIfNeeded()
+        {
+            if (_sortMode == SpriteSortMode.Immediate)
+            {
+                _batcher.DrawBatch(_sortMode, _effect);
+            }
         }
 
         /// <summary>
