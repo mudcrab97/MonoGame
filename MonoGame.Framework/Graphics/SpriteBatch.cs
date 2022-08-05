@@ -588,10 +588,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 _texCoordBR = Vector2.One;
             }
 
-            var topLeft = new VertexPositionColorTexture(destinationQuad.TopLeft, color, new(_texCoordTL.X, _texCoordTL.Y));
-            var topRight = new VertexPositionColorTexture(destinationQuad.TopRight, color, new(_texCoordBR.X, _texCoordTL.Y));
-            var bottomLeft = new VertexPositionColorTexture(destinationQuad.BottomLeft, color, new(_texCoordTL.X, _texCoordBR.Y));
-            var bottomRight = new VertexPositionColorTexture(destinationQuad.BottomRight, color, new(_texCoordBR.X, _texCoordBR.Y));
+            var topLeft = new VertexPositionColorTexture(destinationQuad.TopLeft.Position, destinationQuad.TopLeft.Color, new(_texCoordTL.X, _texCoordTL.Y));
+            var topRight = new VertexPositionColorTexture(destinationQuad.TopRight.Position, destinationQuad.TopRight.Color, new(_texCoordBR.X, _texCoordTL.Y));
+            var bottomLeft = new VertexPositionColorTexture(destinationQuad.BottomLeft.Position, destinationQuad.BottomLeft.Color, new(_texCoordTL.X, _texCoordBR.Y));
+            var bottomRight = new VertexPositionColorTexture(destinationQuad.BottomRight.Position, destinationQuad.BottomRight.Color, new(_texCoordBR.X, _texCoordBR.Y));
 
             item.Set(topLeft, topRight, bottomRight, bottomLeft);
 

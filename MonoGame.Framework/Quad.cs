@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework
@@ -14,25 +15,25 @@ namespace Microsoft.Xna.Framework
         /// The coordinates of the top-left corner of this <see cref="Quad"/>.
         /// </summary>
         [DataMember]
-        public Vector3 TopLeft;
+        public VertexPositionColor TopLeft;
 
         /// <summary>
         /// The coordinates of the top-right corner of this <see cref="Quad"/>.
         /// </summary>
         [DataMember]
-        public Vector3 TopRight;
+        public VertexPositionColor TopRight;
 
         /// <summary>
         /// The coordinates of the bottom-right corner of this <see cref="Quad"/>.
         /// </summary>
         [DataMember]
-        public Vector3 BottomRight;
+        public VertexPositionColor BottomRight;
 
         /// <summary>
         /// The coordinates of the bottom-left corner of this <see cref="Quad"/>.
         /// </summary>
         [DataMember]
-        public Vector3 BottomLeft;
+        public VertexPositionColor BottomLeft;
         #endregion
 
         #region Public Properties
@@ -43,11 +44,11 @@ namespace Microsoft.Xna.Framework
         {
             get
             {
-                var minX = (int)MathF.Min(TopLeft.X, BottomLeft.X);
-                var maxX = (int)MathF.Max(TopRight.X, BottomRight.X);
+                var minX = (int)MathF.Min(TopLeft.Position.X, BottomLeft.Position.X);
+                var maxX = (int)MathF.Max(TopRight.Position.X, BottomRight.Position.X);
 
-                var minY = (int)MathF.Min(BottomLeft.Y, BottomRight.Y);
-                var maxY = (int)MathF.Max(TopLeft.Y, TopRight.Y);
+                var minY = (int)MathF.Min(BottomLeft.Position.Y, BottomRight.Position.Y);
+                var maxY = (int)MathF.Max(TopLeft.Position.Y, TopRight.Position.Y);
 
                 return new(minX, minY, maxX - minX, maxY - minY);
             }
@@ -61,25 +62,27 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         /// <param name="x">The x coordinate of the top-left corner of the created <see cref="Quad"/>.</param>
         /// <param name="y">The y coordinate of the top-left corner of the created <see cref="Quad"/>.</param>
+        /// <param name="z">The depth of all corners of the created <see cref="Quad"/>.</param>
         /// <param name="width">The width of the created <see cref="Quad"/>.</param>
         /// <param name="height">The height of the created <see cref="Quad"/>.</param>
-        public Quad(float x, float y, float width, float height, float depth)
+        /// <param name="color">The color of the created <see cref="Quad"/>.</param>
+        public Quad(float x, float y, float z, float width, float height, Color color)
         {
-            TopLeft = new(x, y, depth);
-            TopRight = new(x + width, y, depth);
-            BottomRight = new(x + width, y + height, depth);
-            BottomLeft = new(x, y + height, depth);
+            TopLeft = new(new(x, y, z), color);
+            TopRight = new(new(x + width, y, z), color);
+            BottomRight = new(new(x + width, y + height, z), color);
+            BottomLeft = new(new(x, y + height, z), color);
         }
 
         /// <summary>
         /// Creates a new instance of <see cref="Quad"/> struct, with the specified
         /// corner coordinates.
         /// </summary>
-        /// <param name="topLeft">The coordinates of the top-left corner of the created <see cref="Quad"/>.</param>
-        /// <param name="topRight">The coordinates of the top-right corner of the created <see cref="Quad"/>.</param>
-        /// <param name="bottomRight">The coordinates of the bottom-right corner of the created <see cref="Quad"/>.</param>
-        /// <param name="bottomLeft">The coordinates of the bottom-left corner of the created <see cref="Quad"/>.</param>
-        public Quad(Vector3 topLeft, Vector3 topRight, Vector3 bottomRight, Vector3 bottomLeft)
+        /// <param name="topLeft">The vertex of the top-left corner of the created <see cref="Quad"/>.</param>
+        /// <param name="topRight">The vertex of the top-right corner of the created <see cref="Quad"/>.</param>
+        /// <param name="bottomRight">The vertex of the bottom-right corner of the created <see cref="Quad"/>.</param>
+        /// <param name="bottomLeft">The vertex of the bottom-left corner of the created <see cref="Quad"/>.</param>
+        public Quad(VertexPositionColor topLeft, VertexPositionColor topRight, VertexPositionColor bottomRight, VertexPositionColor bottomLeft)
         {
             TopLeft = topLeft;
             TopRight = topRight;
@@ -158,7 +161,8 @@ namespace Microsoft.Xna.Framework
         /// <param name="topRight"></param>
         /// <param name="bottomRight"></param>
         /// <param name="bottomLeft"></param>
-        public void Deconstruct(out Vector3 topLeft, out Vector3 topRight, out Vector3 bottomRight, out Vector3 bottomLeft)
+        public void Deconstruct(out VertexPositionColor topLeft, out VertexPositionColor topRight,
+            out VertexPositionColor bottomRight, out VertexPositionColor bottomLeft)
         {
             topLeft = TopLeft;
             topRight = TopRight;
